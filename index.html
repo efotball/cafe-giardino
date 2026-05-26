@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Giardino — Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown: #8B4513;
+    --brown-dark: #5C2E0A;
+    --brown-mid: #A0522D;
+    --brown-light: #C4956A;
+    --cream: #F5E6D0;
+    --cream-light: #FDF6EC;
+    --text-dark: #2C1A0E;
+    --text-light: #F5E6D0;
+    --accent: #D4A76A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--brown-dark);
+    font-family: 'Tajawal', sans-serif;
+    color: var(--text-light);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(160deg, #8B4513 0%, #5C2E0A 60%, #3A1A05 100%);
+    text-align: center;
+    padding: 50px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c4956a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 15vw, 90px);
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 8px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  }
+  .hero-subtitle {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+
+  /* TABLE BADGE */
+  .table-badge {
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(196,149,106,0.3);
+    border-bottom: 1px solid rgba(196,149,106,0.3);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+  }
+  .table-badge-text {
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .table-badge-num {
+    background: var(--accent);
+    color: var(--brown-dark);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 3px 14px;
+    border-radius: 20px;
+  }
+  .table-badge-error {
+    background: rgba(200,60,60,0.3);
+    border: 1px solid rgba(200,60,60,0.5);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #ffaaaa;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* CATEGORY NAV */
+  .cat-nav {
+    display: flex;
+    gap: 8px;
+    padding: 16px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: rgba(0,0,0,0.2);
+  }
+  .cat-nav::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    background: transparent;
+    border: 1px solid rgba(196,149,106,0.4);
+    color: var(--cream-light);
+    padding: 7px 16px;
+    border-radius: 30px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .cat-btn.active, .cat-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--brown-dark);
+    font-weight: 700;
+  }
+
+  /* MAIN CONTENT */
+  .content { padding: 0 0 80px; }
+
+  /* SECTION */
+  .section {
+    padding: 32px 16px 16px;
+    display: none;
+  }
+  .section.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(196,149,106,0.3);
+  }
+  .section-icon { font-size: 28px; }
+  .section-title-block {}
+  .section-title-ar {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    display: block;
+  }
+  .section-title-fr {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--accent);
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+
+  /* ITEM CARD */
+  .items-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .item-card {
+    background: rgba(139,69,19,0.25);
+    border: 1px solid rgba(196,149,106,0.2);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .item-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(196,149,106,0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .item-card:hover { border-color: var(--accent); transform: translateX(-3px); }
+  .item-card:hover::before { opacity: 1; }
+  .item-card.selected {
+    border-color: var(--accent);
+    background: rgba(212,167,106,0.2);
+    box-shadow: 0 0 20px rgba(212,167,106,0.2);
+  }
+
+  .item-info { flex: 1; }
+  .item-name-ar {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .item-name-fr {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--accent);
+    font-style: italic;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .item-desc {
+    font-size: 11px;
+    color: rgba(245,230,208,0.6);
+    line-height: 1.5;
+  }
+  .item-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .item-price span {
+    display: block;
+    font-size: 10px;
+    color: rgba(196,149,106,0.7);
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 400;
+  }
+
+  /* QTY CONTROLS */
+  .qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+  .qty-btn:hover { background: var(--accent); color: var(--brown-dark); }
+  .qty-num {
+    min-width: 24px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  /* CART */
+  .cart-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(135deg, #5C2E0A, #8B4513);
+    border-top: 2px solid var(--accent);
+    padding: 14px 20px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+  }
+  .cart-bar.visible { display: flex; }
+  .cart-info { display: flex; flex-direction: column; gap: 2px; }
+  .cart-count { font-size: 12px; color: var(--accent); }
+  .cart-total { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); }
+  .cart-total span { font-size: 13px; font-family: 'Tajawal', sans-serif; }
+  .order-btn {
+    background: var(--accent);
+    color: var(--brown-dark);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .order-btn:hover { background: var(--cream); transform: scale(1.05); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    display: none;
+    align-items: flex-end;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: linear-gradient(160deg, #5C2E0A, #3A1A05);
+    border-radius: 24px 24px 0 0;
+    border-top: 2px solid var(--accent);
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px 20px 40px;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: rgba(196,149,106,0.4);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+  .modal-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  .order-list { margin-bottom: 20px; }
+  .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(196,149,106,0.15);
+    font-size: 14px;
+  }
+  .order-item-name { color: var(--cream); }
+  .order-item-qty { color: var(--accent); margin: 0 8px; }
+  .order-item-price { color: var(--accent); font-weight: 700; }
+  .order-total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+    border-top: 2px solid rgba(196,149,106,0.3);
+    margin-top: 4px;
+  }
+  .order-total-row span { color: var(--accent); }
+  .confirm-btn {
+    width: 100%;
+    background: var(--accent);
+    color: var(--brown-dark);
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+  }
+  .confirm-btn:hover { background: var(--cream); }
+  .cancel-btn {
+    width: 100%;
+    background: transparent;
+    color: rgba(245,230,208,0.5);
+    border: 1px solid rgba(196,149,106,0.2);
+    padding: 12px;
+    border-radius: 16px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  /* SUCCESS */
+  .success-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+  .success-overlay.open { display: flex; }
+  .success-icon { font-size: 72px; margin-bottom: 16px; animation: bounce 0.6s ease; }
+  @keyframes bounce {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  .success-title { font-size: 26px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+  .success-sub { color: var(--accent); font-size: 14px; margin-bottom: 30px; }
+  .success-new-btn {
+    background: var(--accent);
+    color: var(--brown-dark);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* LANG TOGGLE */
+  .lang-toggle {
+    position: fixed;
+    top: 14px; left: 14px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 300;
+    font-family: 'Tajawal', sans-serif;
+    backdrop-filter: blur(8px);
+  }
+
+  /* RTL/LTR */
+  body.fr { direction: ltr; }
+  body.fr .item-card:hover { transform: translateX(3px); }
+  body.fr .cat-nav { direction: ltr; }
+
+  .fr-only { display: none; }
+  .ar-only { display: block; }
+  body.fr .fr-only { display: block; }
+  body.fr .ar-only { display: none; }
+
+  .inline-fr { display: none; }
+  .inline-ar { display: inline; }
+  body.fr .inline-fr { display: inline; }
+  body.fr .inline-ar { display: none; }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()" id="langBtn">FR</button>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-area">
+    <div class="logo-icon">🌿</div>
+    <div class="logo-text">GIARDINO</div>
+  </div>
+  <div class="hero-title">Menu</div>
+  <div class="hero-subtitle ar-only">اختر ما يشتهيك</div>
+  <div class="hero-subtitle fr-only">Choisissez votre plaisir</div>
+</div>
+
+<!-- TABLE BADGE -->
+<div class="table-badge" id="tableBadge"></div>
+<input type="hidden" id="tableNum" value="">
+
+<!-- CATEGORY NAV -->
+<div class="cat-nav" id="catNav"></div>
+
+<!-- CONTENT -->
+<div class="content" id="content"></div>
+
+<!-- CART BAR -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-info">
+    <div class="cart-count" id="cartCount"></div>
+    <div class="cart-total" id="cartTotal"></div>
+  </div>
+  <button class="order-btn" onclick="openModal()">
+    <span class="inline-ar">تأكيد الطلب 🛎️</span>
+    <span class="inline-fr">Commander 🛎️</span>
+  </button>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title ar-only">تفاصيل طلبك</div>
+    <div class="modal-title fr-only">Votre commande</div>
+    <div class="modal-subtitle ar-only" id="tableLabel">الطاولة: —</div>
+    <div class="modal-subtitle fr-only" id="tableLabelFr">Table: —</div>
+    <div class="order-list" id="orderList"></div>
+    <div class="order-total-row ar-only">المجموع <span id="orderTotalAr"></span></div>
+    <div class="order-total-row fr-only">Total <span id="orderTotalFr"></span></div>
+    <button class="confirm-btn" onclick="submitOrder()">
+      <span class="inline-ar">✅ إرسال الطلب للمطبخ</span>
+      <span class="inline-fr">✅ Envoyer la commande</span>
+    </button>
+    <button class="cancel-btn" onclick="closeModal()">
+      <span class="inline-ar">إلغاء</span>
+      <span class="inline-fr">Annuler</span>
+    </button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-icon">🎉</div>
+  <div class="success-title ar-only">تم إرسال طلبك!</div>
+  <div class="success-title fr-only">Commande envoyée!</div>
+  <div class="success-sub ar-only">النادل في طريقه إليك</div>
+  <div class="success-sub fr-only">Le serveur arrive bientôt</div>
+  <button class="success-new-btn" onclick="resetOrder()">
+    <span class="inline-ar">طلب جديد</span>
+    <span class="inline-fr">Nouvelle commande</span>
+  </button>
+</div>
+
+<script>
+// ============ DATA ============
+const menuData = [
+  {
+    id: 'petit-dej',
+    icon: '🥐',
+    nameAr: 'الفطور',
+    nameFr: 'Petit Déjeuner',
+    items: [
+      { id: 'pd1', nameAr: 'فطور إسباني', nameFr: 'Petit déjeuner Espagnol', price: 35 },
+      { id: 'pd2', nameAr: 'فطور بلدي', nameFr: 'Petit déjeuner Beldi', price: 28 },
+      { id: 'pd3', nameAr: 'فطور فاسي', nameFr: 'Petit déjeuner Fassi', price: 35 },
+      { id: 'pd4', nameAr: 'فطور مودرن', nameFr: 'Petit déjeuner Modern', price: 23 },
+      { id: 'pd5', nameAr: 'فطور جياردينو', nameFr: 'Petit déjeuner Giardino', price: 50 },
+    ]
+  },
+  {
+    id: 'boisson-chaude',
+    icon: '☕',
+    nameAr: 'مشروبات ساخنة',
+    nameFr: 'Boissons Chaudes',
+    items: [
+      { id: 'bc1', nameAr: 'إسبريسو', nameFr: 'Expresso', price: 12 },
+      { id: 'bc2', nameAr: 'أمريكان', nameFr: 'Américain', price: 14 },
+      { id: 'bc3', nameAr: 'دبل إسبريس', nameFr: 'Double express', price: 16 },
+      { id: 'bc4', nameAr: 'كافي كريم', nameFr: 'Café crème', price: 13 },
+      { id: 'bc5', nameAr: 'لاتي ماكياتو', nameFr: 'Latté macciatto', descAr: 'فانيل / كراميل / نواة / شوكولا', descFr: 'vanille / caramel / noisette / chocolat', price: 16 },
+      { id: 'bc6', nameAr: 'شاي بالنعناع', nameFr: 'Thé à la menthe', price: 11 },
+      { id: 'bc7', nameAr: 'شاي فيرفين', nameFr: 'Thé verveine', price: 11 },
+      { id: 'bc8', nameAr: 'ليبتون', nameFr: 'Lipton', price: 12 },
+      { id: 'bc9', nameAr: 'إنفيزيون', nameFr: 'Infusion', price: 11 },
+      { id: 'bc10', nameAr: 'حليب بالفيرفين', nameFr: 'Lait verveine', price: 12 },
+      { id: 'bc11', nameAr: 'حليب ساخن', nameFr: 'Lait chaud', price: 12 },
+      { id: 'bc12', nameAr: 'حليب بالشوكولا', nameFr: 'Lait au chocolat', price: 13 },
+      { id: 'bc13', nameAr: 'كابتشينو', nameFr: 'Cappuccino', price: 13 },
+      { id: 'bc14', nameAr: 'كابتشينو شانتيي', nameFr: 'Cappuccino chantier', price: 15 },
+      { id: 'bc15', nameAr: 'شوكولا قديمة', nameFr: "Chocolat à l'ancien", price: 17 },
+      { id: 'bc16', nameAr: 'كافي موكا', nameFr: 'Café moka', price: 19 },
+    ]
+  },
+  {
+    id: 'frappe',
+    icon: '🧋',
+    nameAr: 'فرابتشينو',
+    nameFr: 'Frappuccino',
+    items: [
+      { id: 'fr1', nameAr: 'فانيل', nameFr: 'Vanille', price: 18 },
+      { id: 'fr2', nameAr: 'كراميل', nameFr: 'Caramel', price: 18 },
+      { id: 'fr3', nameAr: 'شوكولا', nameFr: 'Chocolat', price: 18 },
+      { id: 'fr4', nameAr: 'نواة', nameFr: 'Noisette', price: 18 },
+    ]
+  },
+  {
+    id: 'milkshake',
+    icon: '🥤',
+    nameAr: 'ميلك شيك',
+    nameFr: 'Milkshake Classique',
+    items: [
+      { id: 'ms1', nameAr: 'فانيل', nameFr: 'Vanille', price: 30 },
+      { id: 'ms2', nameAr: 'كراميل بوب كورن', nameFr: 'Caramel pop-corn', price: 30 },
+      { id: 'ms3', nameAr: 'فراولة مارشميلو', nameFr: 'Fraise marshmello', price: 30 },
+      { id: 'ms4', nameAr: 'شوكولا نوار', nameFr: 'Chocolat noir', price: 30 },
+      { id: 'ms5', nameAr: 'بلوبيري', nameFr: 'Blueberry', price: 30 },
+    ]
+  },
+  {
+    id: 'mojito',
+    icon: '🍃',
+    nameAr: 'موهيتو',
+    nameFr: 'Mojito',
+    items: [
+      { id: 'mj1', nameAr: 'كلاسيك', nameFr: 'Classique', price: 25 },
+      { id: 'mj2', nameAr: 'فواكه حمراء', nameFr: 'Fruit rouge', price: 30 },
+      { id: 'mj3', nameAr: 'بلو كوراساو', nameFr: 'Bleu curasao', price: 30 },
+      { id: 'mj4', nameAr: 'ريد بول', nameFr: 'Red bull', price: 45 },
+    ]
+  },
+  {
+    id: 'cocktail',
+    icon: '🍹',
+    nameAr: 'كوكتيل',
+    nameFr: 'Cocktail',
+    items: [
+      { id: 'ck1', nameAr: 'جياردينو', nameFr: 'Jiardino', descAr: 'فراولة / توت / مرتيل / برتقال', descFr: 'fraise / framboise / merthel / orange', price: 35 },
+      { id: 'ck2', nameAr: 'عسل ولوز', nameFr: 'Miel et amande', descAr: 'موز / عسل / جوز / لوز / حليب', descFr: 'banane / miel / noix / amande / lait', price: 25 },
+      { id: 'ck3', nameAr: 'بينا كولادا', nameFr: 'Pina colada', descAr: 'أناناس / جوز هند / حليب', descFr: 'ananas / coco / lait', price: 30 },
+      { id: 'ck4', nameAr: 'بلو هاواي', nameFr: 'Blue Hawaii', descAr: 'أناناس / هاواي / جوز هند', descFr: 'ananas / hawai / coco', price: 35 },
+    ]
+  },
+  {
+    id: 'smoothie',
+    icon: '🥝',
+    nameAr: 'سموثي',
+    nameFr: 'Smoothie',
+    items: [
+      { id: 'sm1', nameAr: 'طوكيو', nameFr: 'Tokyo', descAr: 'أفوكادو / جوز هند', descFr: 'avocat / coco', price: 30 },
+      { id: 'sm2', nameAr: 'إكزوتيك', nameFr: 'Exotique', descAr: 'مانجو / أناناس / كيوي / تروبيكال', descFr: 'mange / ananas / kiwi / tropicale', price: 25 },
+    ]
+  },
+  {
+    id: 'bubble',
+    icon: '🧊',
+    nameAr: 'بابل تي وآيس تي',
+    nameFr: 'Bubble Tea & Ice Tea',
+    items: [
+      { id: 'bt1', nameAr: 'بابل تي مانجو', nameFr: 'Bubble Tea Mangue', price: 30 },
+      { id: 'bt2', nameAr: 'بابل تي أناناس', nameFr: 'Bubble Tea Ananas', price: 30 },
+      { id: 'bt3', nameAr: 'بابل تي فراولة', nameFr: 'Bubble Tea Fraise', price: 30 },
+      { id: 'bt4', nameAr: 'آيس تي ليمون', nameFr: 'Ice Tea Citron', price: 25 },
+      { id: 'bt5', nameAr: 'آيس تي خوخ', nameFr: 'Ice Tea Pêche', price: 25 },
+      { id: 'bt6', nameAr: 'آيس تي فواكه حمراء', nameFr: 'Ice Tea Fruit rouge', price: 25 },
+    ]
+  },
+  {
+    id: 'boissons-fraiches',
+    icon: '💧',
+    nameAr: 'مشروبات باردة',
+    nameFr: 'Boissons Fraîches',
+    items: [
+      { id: 'bf1', nameAr: 'ماء معدني 0.5L', nameFr: 'Eaux minérales 0.5L', price: 8 },
+      { id: 'bf2', nameAr: 'أولمس 0.5L', nameFr: 'Oulmess 0.5L', price: 11 },
+      { id: 'bf3', nameAr: 'صودا 33cl', nameFr: 'Soda 33 cL au choix', price: 13 },
+      { id: 'bf4', nameAr: 'عصير برتقال', nameFr: 'Jus Orange', price: 16 },
+      { id: 'bf5', nameAr: 'عصير ليمون', nameFr: 'Jus Citron', price: 16 },
+      { id: 'bf6', nameAr: 'ليموناد مايزون', nameFr: 'Limonade maison', price: 18 },
+      { id: 'bf7', nameAr: 'عصير موز', nameFr: 'Jus Banane', price: 16 },
+      { id: 'bf8', nameAr: 'عصير تفاح', nameFr: 'Jus Pomme', price: 16 },
+      { id: 'bf9', nameAr: 'عصير فراولة', nameFr: 'Jus Fraise', price: 16 },
+      { id: 'bf10', nameAr: 'عصير أفوكادو', nameFr: 'Jus Avocat', price: 20 },
+      { id: 'bf11', nameAr: 'أفوكادو فواكه جافة', nameFr: 'Avocat fruit sec', price: 32 },
+      { id: 'bf12', nameAr: 'عصير مانجو', nameFr: 'Jus Mangue', price: 23 },
+      { id: 'bf13', nameAr: 'عصير أناناس', nameFr: 'Jus Ananas', price: 24 },
+      { id: 'bf14', nameAr: 'عصير كيوي', nameFr: 'Jus Kiwi', price: 19 },
+    ]
+  }
+];
+
+// ============ STATE ============
+let cart = {}; // { itemId: qty }
+let currentLang = 'ar';
+let currentCat = menuData[0].id;
+
+// ============ INIT ============
+function init() {
+  // Read table number from URL ?table=X
+  const urlParams = new URLSearchParams(window.location.search);
+  const tableNum = urlParams.get('table');
+  const badge = document.getElementById('tableBadge');
+  if (tableNum && !isNaN(tableNum)) {
+    document.getElementById('tableNum').value = tableNum;
+    badge.innerHTML = `
+      <span class="table-badge-text ar-only">🪑 الطاولة</span>
+      <span class="table-badge-text fr-only">🪑 Table</span>
+      <span class="table-badge-num">${tableNum}</span>
+    `;
+  } else {
+    badge.innerHTML = `<div class="table-badge-error ar-only">⚠️ رابط غير صحيح — امسح الـ QR مرة أخرى</div><div class="table-badge-error fr-only">⚠️ Lien invalide — scannez le QR à nouveau</div>`;
+  }
+  renderNav();
+  renderSection(currentCat);
+}
+
+function renderNav() {
+  const nav = document.getElementById('catNav');
+  nav.innerHTML = menuData.map(cat => `
+    <button class="cat-btn ${cat.id === currentCat ? 'active' : ''}" onclick="switchCat('${cat.id}')">
+      ${cat.icon} <span class="inline-ar">${cat.nameAr}</span><span class="inline-fr">${cat.nameFr}</span>
+    </button>
+  `).join('');
+  if (document.body.classList.contains('fr')) {
+    document.querySelectorAll('.inline-ar').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.inline-fr').forEach(el => el.style.display = 'inline');
+  }
+}
+
+function renderSection(catId) {
+  const cat = menuData.find(c => c.id === catId);
+  if (!cat) return;
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="section active">
+      <div class="section-header">
+        <div class="section-icon">${cat.icon}</div>
+        <div class="section-title-block">
+          <span class="section-title-ar ar-only">${cat.nameAr}</span>
+          <span class="section-title-ar fr-only">${cat.nameFr}</span>
+          <span class="section-title-fr ar-only">${cat.nameFr}</span>
+          <span class="section-title-fr fr-only">${cat.nameAr}</span>
+        </div>
+      </div>
+      <div class="items-grid">
+        ${cat.items.map(item => renderItemCard(item)).join('')}
+      </div>
+    </div>
+  `;
+  if (document.body.classList.contains('fr')) applyLangClasses();
+}
+
+function renderItemCard(item) {
+  const qty = cart[item.id] || 0;
+  return `
+    <div class="item-card ${qty > 0 ? 'selected' : ''}" id="card-${item.id}">
+      <div class="item-info">
+        <span class="item-name-ar ar-only">${item.nameAr}</span>
+        <span class="item-name-ar fr-only">${item.nameFr}</span>
+        <span class="item-name-fr ar-only">${item.nameFr}</span>
+        <span class="item-name-fr fr-only">${item.nameAr}</span>
+        ${item.descAr ? `<span class="item-desc ar-only">${item.descAr}</span><span class="item-desc fr-only">${item.descFr||item.descAr}</span>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div class="item-price">${item.price} <span>DH</span></div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty('${item.id}', -1, event)">−</button>
+          <span class="qty-num" id="qty-${item.id}">${qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}', 1, event)">+</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function switchCat(catId) {
+  currentCat = catId;
+  renderNav();
+  renderSection(catId);
+  if (document.body.classList.contains('fr')) applyLangClasses();
+}
+
+// ============ CART ============
+function changeQty(itemId, delta, e) {
+  e.stopPropagation();
+  const current = cart[itemId] || 0;
+  const newQty = Math.max(0, current + delta);
+  if (newQty === 0) delete cart[itemId];
+  else cart[itemId] = newQty;
+
+  const qtyEl = document.getElementById(`qty-${itemId}`);
+  const cardEl = document.getElementById(`card-${itemId}`);
+  if (qtyEl) qtyEl.textContent = newQty;
+  if (cardEl) cardEl.classList.toggle('selected', newQty > 0);
+
+  updateCartBar();
+}
+
+function getCartTotal() {
+  let total = 0;
+  for (const [id, qty] of Object.entries(cart)) {
+    const item = menuData.flatMap(c => c.items).find(i => i.id === id);
+    if (item) total += item.price * qty;
+  }
+  return total;
+}
+
+function getCartCount() {
+  return Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+function updateCartBar() {
+  const bar = document.getElementById('cartBar');
+  const count = getCartCount();
+  const total = getCartTotal();
+  if (count === 0) { bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  const isAr = !document.body.classList.contains('fr');
+  document.getElementById('cartCount').textContent = isAr ? `${count} صنف` : `${count} article(s)`;
+  document.getElementById('cartTotal').innerHTML = `${total} <span>DH</span>`;
+}
+
+// ============ MODAL ============
+function openModal() {
+  const table = document.getElementById('tableNum').value;
+  const isAr = !document.body.classList.contains('fr');
+  if (!table) {
+    alert(isAr ? 'رابط غير صحيح — امسح الـ QR مرة أخرى' : 'Lien invalide — scannez le QR à nouveau');
+    return;
+  }
+  document.getElementById('tableLabel').textContent = `الطاولة: ${table}`;
+  document.getElementById('tableLabelFr').textContent = `Table: ${table}`;
+
+  const allItems = menuData.flatMap(c => c.items);
+  let listHTML = '';
+  for (const [id, qty] of Object.entries(cart)) {
+    const item = allItems.find(i => i.id === id);
+    if (!item) continue;
+    listHTML += `
+      <div class="order-item">
+        <span class="order-item-name">${isAr ? item.nameAr : item.nameFr}</span>
+        <span class="order-item-qty">×${qty}</span>
+        <span class="order-item-price">${item.price * qty} DH</span>
+      </div>
+    `;
+  }
+  document.getElementById('orderList').innerHTML = listHTML;
+  const total = `${getCartTotal()} DH`;
+  document.getElementById('orderTotalAr').textContent = total;
+  document.getElementById('orderTotalFr').textContent = total;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+// ============ SUBMIT ============
+async function submitOrder() {
+  const table = document.getElementById('tableNum').value;
+  const allItems = menuData.flatMap(c => c.items);
+
+  const orderItems = [];
+  for (const [id, qty] of Object.entries(cart)) {
+    const item = allItems.find(i => i.id === id);
+    if (item) orderItems.push({ nameAr: item.nameAr, nameFr: item.nameFr, qty, price: item.price });
+  }
+
+  const orderText = orderItems.map(i => `${i.nameAr} (${i.nameFr}) x${i.qty}`).join(', ');
+  const total = getCartTotal();
+
+  const payload = {
+    table: parseInt(table),
+    order: orderText,
+    total: total,
+  };
+
+  closeModal();
+  document.getElementById('successOverlay').classList.add('open');
+
+  try {
+    await fetch('http://localhost:5678/webhook/Café Giardino', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+  } catch (err) {
+    console.log('Webhook:', err);
+  }
+}
+
+function resetOrder() {
+  cart = {};
+  document.getElementById('successOverlay').classList.remove('open');
+  document.getElementById('cartBar').classList.remove('visible');
+  switchCat(currentCat);
+}
+
+// ============ LANG ============
+function toggleLang() {
+  if (document.body.classList.contains('fr')) {
+    document.body.classList.remove('fr');
+    document.body.setAttribute('dir', 'rtl');
+    document.getElementById('langBtn').textContent = 'FR';
+    currentLang = 'ar';
+  } else {
+    document.body.classList.add('fr');
+    document.body.setAttribute('dir', 'ltr');
+    document.getElementById('langBtn').textContent = 'AR';
+    currentLang = 'fr';
+  }
+  applyLangClasses();
+  updateCartBar();
+  // Re-render badge label
+  applyLangClasses();
+}
+
+function applyLangClasses() {
+  const isFr = document.body.classList.contains('fr');
+  document.querySelectorAll('.ar-only').forEach(el => el.style.display = isFr ? 'none' : '');
+  document.querySelectorAll('.fr-only').forEach(el => el.style.display = isFr ? '' : 'none');
+  document.querySelectorAll('.inline-ar').forEach(el => el.style.display = isFr ? 'none' : 'inline');
+  document.querySelectorAll('.inline-fr').forEach(el => el.style.display = isFr ? 'inline' : 'none');
+}
+
+init();
+</script>
+</body>
+</html>

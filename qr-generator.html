@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Giardino — QR Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown: #8B4513;
+    --brown-dark: #5C2E0A;
+    --cream: #F5E6D0;
+    --accent: #D4A76A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a0e07;
+    font-family: 'Tajawal', sans-serif;
+    color: var(--cream);
+    padding: 24px 16px 60px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .header p { font-size: 14px; color: rgba(245,230,208,0.6); }
+
+  /* CONFIG */
+  .config {
+    background: rgba(139,69,19,0.2);
+    border: 1px solid rgba(196,149,106,0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .config label {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .config input {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(196,149,106,0.4);
+    color: var(--cream);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    outline: none;
+    direction: ltr;
+  }
+  .config input:focus { border-color: var(--accent); }
+
+  .generate-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #3A1A05;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .generate-btn:hover { background: var(--cream); }
+
+  .print-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    padding: 12px;
+    border-radius: 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.3s;
+    display: none;
+  }
+  .print-btn.visible { display: block; }
+  .print-btn:hover { background: rgba(212,167,106,0.1); }
+
+  /* GRID */
+  .qr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* CARD */
+  .qr-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 12px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    page-break-inside: avoid;
+  }
+  .qr-card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cafe-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    color: #8B4513;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .qr-code-wrap {
+    background: white;
+    padding: 4px;
+    border-radius: 8px;
+    border: 2px solid #e8d5b0;
+  }
+  .table-label {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #5C2E0A;
+    direction: rtl;
+  }
+  .table-label span {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    color: #A0522D;
+    direction: ltr;
+    display: block;
+    margin-top: 1px;
+  }
+  .scan-hint {
+    font-size: 9px;
+    color: #aaa;
+    direction: rtl;
+  }
+
+  /* PRINT */
+  @media print {
+    body {
+      background: white !important;
+      padding: 0;
+      color: black;
+    }
+    .config, .header, .print-btn, .generate-btn { display: none !important; }
+    .qr-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 10px;
+    }
+    .qr-card {
+      box-shadow: none;
+      border: 1px solid #ddd;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌿 Café Giardino</h1>
+  <p>مولّد QR Codes للطاولات</p>
+</div>
+
+<div class="config">
+  <div>
+    <label>🔗 رابط الموقع (بدون / في الآخر)</label>
+    <input type="text" id="baseUrl" placeholder="https://your-username.github.io/cafe-giardino" value="https://your-username.github.io/cafe-giardino">
+  </div>
+  <div>
+    <label>عدد الطاولات</label>
+    <input type="number" id="tableCount" value="50" min="1" max="100">
+  </div>
+  <button class="generate-btn" onclick="generate()">⚡ توليد QR Codes</button>
+  <button class="print-btn" id="printBtn" onclick="window.print()">🖨️ طباعة الكل</button>
+</div>
+
+<div class="qr-grid" id="qrGrid"></div>
+
+<script>
+function generate() {
+  const baseUrl = document.getElementById('baseUrl').value.trim().replace(/\/$/, '');
+  const count = parseInt(document.getElementById('tableCount').value) || 50;
+  const grid = document.getElementById('qrGrid');
+  grid.innerHTML = '';
+
+  for (let i = 1; i <= count; i++) {
+    const url = `${baseUrl}/index.html?table=${i}`;
+
+    const card = document.createElement('div');
+    card.className = 'qr-card';
+    card.innerHTML = `
+      <div class="qr-card-top">
+        <span style="font-size:14px">🌿</span>
+        <span class="cafe-name">Café Giardino</span>
+      </div>
+      <div class="qr-code-wrap" id="qr-wrap-${i}"></div>
+      <div class="table-label">
+        طاولة ${i}
+        <span>Table ${i}</span>
+      </div>
+      <div class="scan-hint">امسح للطلب • Scannez pour commander</div>
+    `;
+    grid.appendChild(card);
+
+    new QRCode(document.getElementById(`qr-wrap-${i}`), {
+      text: url,
+      width: 130,
+      height: 130,
+      colorDark: '#5C2E0A',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
+  document.getElementById('printBtn').classList.add('visible');
+  document.getElementById('printBtn').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Auto generate on load with default values
+window.onload = () => generate();
+</script>
+</body>
+</html>
