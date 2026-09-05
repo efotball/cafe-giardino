@@ -124,9 +124,9 @@ body{font-family:'Poppins',sans-serif;background:#9b5535;color:#fff;overflow-x:h
     </div>
   </div>
 </div>
-<script>
-const WEBHOOK='https://n8n-production-5ad68.up.railway.app/webhook/Cafe-Giardino';
-let cart=[];
+<script>;
+ const WEBHOOK='https://primary-production-ff30f.up.railway.app/webhook/376547a9-8531-407e-bc1b-0ca46e49ca93';
+ let cart=[];
 const tableNum=new URLSearchParams(window.location.search).get('table')||'—';
 window.addEventListener('DOMContentLoaded',()=>{document.getElementById('tbl').textContent='🪑 طاولة '+tableNum;});
 function tog(el){if(el.classList.contains('sel')){el.classList.remove('sel')}else{el.classList.add('sel');el.querySelector('.qn').textContent='1';syncQP(el)}updateCart();}
